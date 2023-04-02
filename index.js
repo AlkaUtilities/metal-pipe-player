@@ -14,6 +14,7 @@ const {
 } = require("@discordjs/voice");
 const { Client, Intents, MessageEmbed } = require("discord.js");
 const { spawn } = require("child_process");
+const fs = require("fs");
 const config = require("./audio.json");
 
 let currentAudio = {
@@ -129,6 +130,15 @@ client.on("messageCreate", async (message) => {
                         );
                     return message.reply({ embeds: [embed] });
                 }
+
+                if (!fs.existsSync(config[args[0]].path))
+                    return message.reply(
+                        `Error: Audio \` ${
+                            config[args[0]].name ?? config[args[0]].path
+                        } \` with index \` ${config.indexOf(
+                            config[args[0]]
+                        )} \` was not found in the audio folder.`
+                    );
 
                 const prevAudio = currentAudio;
 
