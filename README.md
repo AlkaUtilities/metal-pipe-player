@@ -21,7 +21,8 @@ Join a voice channel and use `/play`
 #### Changing audio
 Type `/list` to see a list of available audio(s) to play.
 Use `/play <index>` to play the selected audio.
-**NOTE: BOT WILL PLAY THE SELECTED AUDIO AFTER THE CURRENT AUDIO IS FINISHED OR HAS REJOINED THE VC**
+
+> **Note** Bot will play the selected audio only after the current audio has ended or the bot rejoins the vc
 
 #### Adding your own audio
 1. Add your audio to the audio folder
@@ -32,4 +33,4 @@ Use `/play <index>` to play the selected audio.
 6. Your audio should be visible in the library
 
 #### Disconnecting the bot from a voice channel
-Get an admin to manually kick the bot from the voice channel
+Use `/disconnect`
