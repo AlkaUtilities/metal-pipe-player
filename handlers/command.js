@@ -11,7 +11,6 @@ const config = require("../config/config.json");
  *
  * Must be called **after** defining client.commands
  * @param {Client} client
- * @param {boolean} global Load global commands?
  */
 async function load_commands(client, global = false) {
     const table = new Table({
@@ -27,13 +26,11 @@ async function load_commands(client, global = false) {
         },
     });
 
-    const devGuild = client.guilds.cache.get(config.devGuildId);
+    // const devGuild = client.guilds.cache.get(config.devGuildId);
 
-    if (!devGuild) {
-        return console.log(
-            chalk.bgRedBright(" ERROR ") + " HANDLER Dev guild not found!"
-        );
-    }
+    // if (!devGuild) {
+    //     return console.log("[ERROR] [HANDLER] Dev guild not found!");
+    // }
 
     await client.commands.clear();
     await client.subCommands.clear();
@@ -42,10 +39,8 @@ async function load_commands(client, global = false) {
     let devCommands = [];
 
     const slashCommandFiles = await load_files("commands");
-    // const contextMenusFiles = await load_files("contextMenus");
     const files = [...slashCommandFiles];
 
-    let validCommands = 0;
     let invalidCommands = 0;
     let subCommands = 0;
 
@@ -92,8 +87,6 @@ async function load_commands(client, global = false) {
                 "GLOBAL",
                 config.cli.status_ok,
             ]);
-        } else if (command.global && global === false) {
-            continue; // if command is global but global is false
         } else {
             devCommands.push(command.data.toJSON());
             table.push([
@@ -107,13 +100,9 @@ async function load_commands(client, global = false) {
 
     console.log(table.toString());
 
-    if (global) {
-        await client.application?.commands
-            .set(globalCommands)
-            .then((commands) => {
-                console.log(`Updated ${commands.size} global commands`);
-            });
-    } else console.log("Global commands were not updated");
+    await client.application?.commands.set(globalCommands).then((commands) => {
+        console.log(`Updated ${commands.size} global commands`);
+    });
 
     await devGuild.commands.set(devCommands).then((commands) => {
         console.log(`Updated ${commands.size} guild commands`);
