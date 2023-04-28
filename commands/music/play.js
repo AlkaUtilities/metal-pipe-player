@@ -17,7 +17,7 @@ const audioCfg = require("../../config/audio_cfg.json");
 const path = require("path");
 
 module.exports = {
-    name: "ping",
+    name: "play",
     disabled: false, // is the command disabled?
     hasESub: false, // does the command has an external sub command?
     initialReply: false, // does command execute with an initial reply?

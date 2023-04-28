@@ -10,7 +10,7 @@ const config = require("../../config/config.json");
 const audios = require("../../config/audios.json");
 
 module.exports = {
-    name: "ping",
+    name: "list",
     disabled: false, // is the command disabled?
     hasESub: false, // does the command has an external sub command?
     initialReply: false, // does command execute with an initial reply?
