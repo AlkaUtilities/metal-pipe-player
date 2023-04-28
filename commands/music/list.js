@@ -7,7 +7,6 @@ const {
 const { embedPages } = require("../../handlers/pages");
 
 const config = require("../../config/config.json");
-const audios = require("../../config/audios.json");
 
 module.exports = {
     name: "list",
@@ -15,7 +14,7 @@ module.exports = {
     hasESub: false, // does the command has an external sub command?
     initialReply: false, // does command execute with an initial reply?
     developer: false, // is command developer only?
-    global: false, // is the command global?
+    global: true, // is the command global?
     data: new SlashCommandBuilder()
         .setName("list")
         .setDescription("Shows a list of the available audio(s)"),
@@ -23,6 +22,8 @@ module.exports = {
      * @param {ChatInputCommandInteraction} interaction
      */
     async execute(interaction, client) {
+        // FIX same case as play.js
+        const audios = require("../../config/audios.json");
         const list = audios.map((i) => `\` ${audios.indexOf(i)} \` ${i.name}`);
 
         const embedDescriptions = [];

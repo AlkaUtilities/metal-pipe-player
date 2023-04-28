@@ -8,12 +8,12 @@ const {
     joinVoiceChannel,
     createAudioPlayer,
     createAudioResource,
+    getVoiceConnection,
     AudioPlayerStatus,
 } = require("@discordjs/voice");
 const fs = require("fs");
 
 const config = require("../../config/config.json");
-const audios = require("../../config/audios.json");
 const audioCfg = require("../../config/audio_cfg.json");
 const path = require("path");
 
@@ -23,7 +23,7 @@ module.exports = {
     hasESub: false, // does the command has an external sub command?
     initialReply: false, // does command execute with an initial reply?
     developer: false, // is command developer only?
-    global: false, // is the command global?
+    global: true, // is the command global?
     data: new SlashCommandBuilder()
         .setName("play")
         .setDescription("Plays the selected audio")
@@ -40,6 +40,10 @@ module.exports = {
      * @param {Client} client
      */
     execute(interaction, client) {
+        // FIX items in the audios array randomly changes, wether its
+        // the path or the name have no idea whats the cause of this
+        const audios = require("../../config/audios.json");
+        console.log(audios);
         if (!interaction.member.voice.channel) {
             return interaction.reply({
                 embeds: [

@@ -9,17 +9,18 @@ module.exports = {
      * @param {Client} client
      */
     execute(client) {
-        load_commands(client, process.argv[2] === "global" ? true : false);
+        load_commands(client);
+
         client.user.setPresence({
             activities: [
                 {
-                    name: "-play",
-                    type: "STREAMING",
+                    name: "/play",
+                    type: ActivityType.Streaming,
                     url: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
                 },
             ],
         });
 
-        console.log(`Logged in as ${client.user.tag}!`);
+        console.log(`Logged in as ${client.user.tag}`);
     },
 };
