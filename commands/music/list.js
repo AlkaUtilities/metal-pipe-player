@@ -14,7 +14,7 @@ module.exports = {
     disabled: false, // is the command disabled?
     hasESub: false, // does the command has an external sub command?
     initialReply: false, // does command execute with an initial reply?
-    developer: true, // is command developer only?
+    developer: false, // is command developer only?
     global: false, // is the command global?
     data: new SlashCommandBuilder()
         .setName("list")

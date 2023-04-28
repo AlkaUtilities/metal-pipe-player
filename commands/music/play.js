@@ -2,6 +2,7 @@ const {
     ChatInputCommandInteraction,
     SlashCommandBuilder,
     EmbedBuilder,
+    Client,
 } = require("discord.js");
 const {
     joinVoiceChannel,
@@ -21,7 +22,7 @@ module.exports = {
     disabled: false, // is the command disabled?
     hasESub: false, // does the command has an external sub command?
     initialReply: false, // does command execute with an initial reply?
-    developer: true, // is command developer only?
+    developer: false, // is command developer only?
     global: false, // is the command global?
     data: new SlashCommandBuilder()
         .setName("play")
@@ -36,6 +37,7 @@ module.exports = {
         ),
     /**
      * @param {ChatInputCommandInteraction} interaction
+     * @param {Client} client
      */
     execute(interaction, client) {
         if (!interaction.member.voice.channel) {
@@ -43,10 +45,34 @@ module.exports = {
                 embeds: [
                     new EmbedBuilder()
                         .setAuthor({
+                            iconURL: client.user.displayAvatarURL({
+                                size: 128,
+                            }),
                             name: "You need to join a voice channel first",
                         })
                         .setColor(config.embeds.bad),
                 ],
+            });
+        }
+
+        const getConnection = getVoiceConnection(interaction.guildId);
+        if (
+            getConnection &&
+            interaction.member.voice.channel.id !==
+                getConnection.joinConfig.channelId
+        ) {
+            return interaction.reply({
+                embeds: [
+                    new EmbedBuilder()
+                        .setAuthor({
+                            iconURL: client.user.displayAvatarURL({
+                                size: 128,
+                            }),
+                            name: "You need to be in the same vc as the bot to be able to use this command",
+                        })
+                        .setColor(config.embeds.bad),
+                ],
+                ephemeral: true,
             });
         }
 
@@ -63,6 +89,9 @@ module.exports = {
                 embeds: [
                     new EmbedBuilder()
                         .setAuthor({
+                            iconURL: client.user.displayAvatarURL({
+                                size: 128,
+                            }),
                             name: "Audio is not set. Please set using `/play <index>` or use `/list` to see a list of the available audio",
                         })
                         .setColor(config.embeds.bad),
@@ -75,6 +104,9 @@ module.exports = {
                 embeds: [
                     new EmbedBuilder()
                         .setAuthor({
+                            iconURL: client.user.displayAvatarURL({
+                                size: 128,
+                            }),
                             name: `Index cannot be less than 0 or greater than the available audio(s)`,
                         })
                         .setColor(config.embeds.bad),
@@ -129,6 +161,7 @@ module.exports = {
             embeds: [
                 new EmbedBuilder()
                     .setAuthor({
+                        iconURL: client.user.displayAvatarURL({ size: 128 }),
                         name: `Playing ${
                             audioCfg[interaction.guildId].name
                         } at #${channel.name}`,
