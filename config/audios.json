@@ -1,17 +1,17 @@
 [
     {
         "name": "One hour of silence broken up by metal pipe falling sound HD REMASTER",
-        "path": "./audio/help.mp3",
+        "path": "audio/help.mp3",
         "src": "https://www.youtube.com/watch?v=gFrmJrTVtO8"
     },
     {
         "name": "Soft Falling Sound of Metal Pipe (ASMR)",
-        "path": "./audio/short.mp3",
+        "path": "audio/short.mp3",
         "src": "https://www.youtube.com/watch?v=FtyZLLdY19Y"
     },
     {
         "name": "1 Hour of Silence Randomly Broken by A10 Warthog Sound",
-        "path": "./audio/1 Hour of Silence Randomly Broken by A10 Warthog Sound.mp3",
+        "path": "audio/1 Hour of Silence Randomly Broken by A10 Warthog Sound.mp3",
         "src": "https://www.youtube.com/watch?v=RTJlNWlLskE"
     }
 ]
