@@ -7,7 +7,6 @@ const {
 const { embedPages } = require("../../handlers/pages");
 
 const config = require("../../config/config.json");
-const audios = require("../../config/audios.json");
 
 module.exports = {
     name: "list",
@@ -23,6 +22,8 @@ module.exports = {
      * @param {ChatInputCommandInteraction} interaction
      */
     async execute(interaction, client) {
+        // FIX same case as play.js
+        const audios = require("../../config/audios.json");
         const list = audios.map((i) => `\` ${audios.indexOf(i)} \` ${i.name}`);
 
         const embedDescriptions = [];
