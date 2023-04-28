@@ -41,9 +41,6 @@ async function load_commands(client, global = false) {
     const slashCommandFiles = await load_files("commands");
     const files = [...slashCommandFiles];
 
-    let invalidCommands = 0;
-    let subCommands = 0;
-
     let i = 0;
     for (const file of files) {
         i++;
@@ -63,19 +60,16 @@ async function load_commands(client, global = false) {
                 "",
                 config.cli.status_bad,
             ]);
-            invalidCommands++;
             continue;
         }
 
         if (command.subCommand) {
             client.subCommands.set(command.subCommand, command);
             table.push([command.subCommand, "", "SUB", config.cli.status_ok]);
-            subCommands++;
             continue;
         }
         // NOTE: command.data.name is for slash commands using the SlashCommandBuilder()
         client.commands.set(command.data.name, command);
-        validCommands++;
 
         const type = command.data.toJSON();
 
