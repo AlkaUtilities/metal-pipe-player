@@ -98,9 +98,9 @@ async function load_commands(client, global = false) {
         console.log(`Updated ${commands.size} global commands`);
     });
 
-    await devGuild.commands.set(devCommands).then((commands) => {
-        console.log(`Updated ${commands.size} guild commands`);
-    });
+    // await devGuild.commands.set(devCommands).then((commands) => {
+    //     console.log(`Updated ${commands.size} guild commands`);
+    // });
 }
 
 module.exports = { load_commands };
