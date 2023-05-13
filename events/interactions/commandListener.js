@@ -53,7 +53,15 @@ module.exports = {
                         content: `This sub command is outdated. \n\`${interaction.commandName}.${subCommandGroup}.${subCommand}\``,
                         ephemeral: true,
                     });
-                } else subCommandFile.execute(interaction, client);
+                } else
+                    try {
+                        subCommandFile.execute(interaction, client);
+                    } catch (err) {
+                        console.log(err);
+                        interaction.reply(
+                            "There was an error executing this sub command"
+                        );
+                    }
             } else {
                 const subCommandFile = client.subCommands.get(
                     `${interaction.commandName}.${subCommand}`
@@ -63,8 +71,22 @@ module.exports = {
                         content: `This sub command is outdated. \n\`${interaction.commandName}.${subCommand}\``,
                         ephemeral: true,
                     });
-                } else subCommandFile.execute(interaction, client);
+                } else
+                    try {
+                        subCommandFile.execute(interaction, client);
+                    } catch (err) {
+                        console.log(err);
+                        interaction.reply(
+                            "There was an error executing this sub command"
+                        );
+                    }
             }
-        } else command.execute(interaction, client);
+        } else
+            try {
+                command.execute(interaction, client);
+            } catch (err) {
+                console.log(err);
+                interaction.reply("There was an error executing this command");
+            }
     },
 };
