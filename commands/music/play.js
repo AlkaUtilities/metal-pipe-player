@@ -10,12 +10,15 @@ const {
     createAudioResource,
     getVoiceConnection,
     AudioPlayerStatus,
+    AudioPlayer,
 } = require("@discordjs/voice");
 const fs = require("fs");
+const { inspect } = require("util");
 
 const config = require("../../config/config.json");
 const audioCfg = require("../../config/audio_cfg.json");
 const path = require("path");
+const internal = require("stream");
 
 module.exports = {
     name: "play",
@@ -43,7 +46,7 @@ module.exports = {
         // FIX items in the audios array randomly changes, wether its
         // the path or the name have no idea whats the cause of this
         const audios = require("../../config/audios.json");
-        console.log(audios);
+        // console.log(audios);
         if (!interaction.member.voice.channel) {
             return interaction.reply({
                 embeds: [
@@ -83,8 +86,12 @@ module.exports = {
         const index = interaction.options.getNumber("index", false);
 
         if (!(interaction.guildId in audioCfg)) {
-            // automatically set it to the first object in audios
-            audioCfg[interaction.guildId] = audios[0];
+            // default value
+            audioCfg[interaction.guildId] = {
+                name: audios[0].name,
+                path: audios[0].path,
+                delay: { min: 30000, max: 300000 },
+            };
         }
 
         // if its somehow undefined
@@ -148,14 +155,6 @@ module.exports = {
         // subscribe to player
         connection.subscribe(player);
 
-        // plays audio
-        player.play(createAudioResource(audioCfg[interaction.guildId].path));
-
-        // replays the audio on idle
-        player.on(AudioPlayerStatus.Idle, () =>
-            player.play(createAudioResource(audioCfg[interaction.guildId].path))
-        );
-
         const guild = client.guilds.cache.get(interaction.guildId);
         const channel = guild.channels.cache.get(
             interaction.member.voice.channel.id
@@ -173,5 +172,38 @@ module.exports = {
                     .setColor(config.embeds.ok),
             ],
         });
+
+        let check;
+
+        max = audioCfg[interaction.guildId].delay.max;
+        min = audioCfg[interaction.guildId].delay.min;
+
+        function getDelay() {
+            return Math.floor(Math.random() * (max - min + 1)) + min;
+        }
+
+        function refreshCheck() {
+            check = getVoiceConnection(interaction.guildId) !== undefined;
+        }
+
+        /**
+         * @param {AudioPlayer} player Audio player
+         * @param {string} path Full path to audio file
+         * @param {CallableFunction} delayFunc Function that returns the delay in ms
+         */
+        function playAudio(player, path, delayFunc) {
+            if (check) {
+                delay = delayFunc();
+                console.log(`playing in ${delay}ms`);
+                setTimeout(() => {
+                    player.play(createAudioResource(path));
+                    playAudio(player, path, delayFunc);
+                    refreshCheck();
+                }, delay);
+            }
+        }
+
+        refreshCheck();
+        playAudio(player, audioCfg[interaction.guildId].path, getDelay);
     },
 };
