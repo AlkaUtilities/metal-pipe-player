@@ -24,7 +24,12 @@ module.exports = {
     async execute(interaction, client) {
         // FIX same case as play.js
         const audios = require("../../config/audios.json");
-        const list = audios.map((i) => `\` ${audios.indexOf(i)} \` ${i.name}`);
+        const list = audios.map(
+            (i) =>
+                `${audios.indexOf(i) + 1}. **${
+                    i.src ? `[${i.name}](${i.src})` : `${i.name}`
+                }**`
+        );
 
         const embedDescriptions = [];
 
@@ -39,17 +44,22 @@ module.exports = {
             // gets the last sub-array (to get the last sub-array,
             // just subtract length by 1, so if theres an array,
             // length = 1, to get it, array[length-1] = array[1-1] = array[0]
-            let temp = embedDescriptions[embedDescriptions.length - 1];
+            // The `.slice` part is to make temp a COPY of embedDescriptions[embedDescriptions.length - 1]
+            // and not a MIRROR to `embedDescriptions[embedDescriptions.length - 1]`
+            let temp = embedDescriptions[embedDescriptions.length - 1].slice();
 
             // adds the current item to temp
+            // Without the `.slice()` this will create a mirror of `embedDescriptions[embedDescriptions.length - 1]`
+            // causing it to push name to `embedDescriptions[embedDescriptions.length - 1]` before checking if it
+            // exceeds the specified limit. Thanks ChatGPT
             temp.push(name);
 
             // check if the current sub-array plus the current item joined with "\\n"
             // would exceed the specified limit
             //
             // 4096 is the embed limit
-            // 17 is for the footer ("Page XXX from XXX")
-            if (temp.join("\\n").length >= 4096 + 17) {
+            // 47 is for the footer ("Page XXXX/XXXX • XXXXXXX audio(s) are available")
+            if (temp.join("\\n").length + 47 >= 4096) {
                 // if it exceeds make a new sub-array with the current item
                 embedDescriptions[embedDescriptions.length] = [name];
             } else {
@@ -71,6 +81,12 @@ module.exports = {
         }
 
         // use embedpages
-        await embedPages(client, interaction, embeds);
+        await embedPages(
+            client,
+            interaction,
+            embeds,
+            false,
+            `${audios.length} audio(s) are available`
+        );
     },
 };

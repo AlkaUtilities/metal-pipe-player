@@ -1,1 +1,18 @@
-{}
+{
+    "998487239803813898": {
+        "name": "AAAAUUUGHHHH Meme Sound Effect",
+        "path": "E:\\VSCode\\metal-pipe-player\\audio\\AAAAUUUGHHHH Meme Sound Effect.mp3",
+        "delay": {
+            "min": 2000,
+            "max": 2000
+        }
+    },
+    "1040913930941386772": {
+        "name": "Metal pipe falling sound effect but it’s more violent",
+        "path": "E:\\VSCode\\metal-pipe-player\\audio\\Metal pipe falling sound effect but it’s more violent_2.mp3",
+        "delay": {
+            "min": 1000,
+            "max": 1000
+        }
+    }
+}
