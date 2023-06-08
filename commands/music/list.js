@@ -60,13 +60,13 @@ module.exports = {
             // would exceed the specified limit
             //
             // 4096 is the embed limit
-            // 17 is for the footer ("Page XXXX/XXXX")
+            // 20 is for the footer ("Page XXXXXXX/XXXXXXX")
             console.log(
                 `${i} | ${temp.join("\\n").length} | ${
                     embedDescriptions.length - 1
                 }`
             );
-            if (temp.join("\\n").length + 17 >= 4096) {
+            if (temp.join("\\n").length + 20 >= 4096) {
                 // if it exceeds make a new sub-array with the current item
                 embedDescriptions[embedDescriptions.length] = [name];
             } else {
