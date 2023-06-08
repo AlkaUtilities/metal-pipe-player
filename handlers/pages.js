@@ -7,7 +7,7 @@ const {
 } = require("discord.js");
 
 module.exports = {
-    embedPages: async (client, interaction, embeds) => {
+    embedPages: async (client, interaction, embeds, ephemeral) => {
         const pages = {};
         const getRow = (id) => {
             //-------------- Create the action row with buttons --------------
@@ -44,13 +44,13 @@ module.exports = {
         const embed = embeds[pages[id]];
 
         await embeds[pages[id]].setFooter({
-            text: `Page ${pages[id] + 1} from ${Pagemax}`,
+            text: `Page ${pages[id] + 1}/${Pagemax}`,
         });
 
         const replyEmbed = await interaction.reply({
             embeds: [embed],
             components: [getRow(id)],
-            ephemeral: true,
+            ephemeral: ephemeral,
             fetchReply: true,
         });
 
@@ -79,13 +79,13 @@ module.exports = {
             }
 
             await embeds[pages[id]].setFooter({
-                text: `Page ${pages[id] + 1} of ${Pagemax}`,
+                text: `Page ${pages[id] + 1}/${Pagemax}`,
             });
 
             await interaction.editReply({
                 embeds: [embeds[pages[id]]],
                 components: [getRow(id)],
-                ephemeral: true,
+                ephemeral: ephemeral,
                 fetchReply: true,
             });
         });
@@ -95,9 +95,12 @@ module.exports = {
             if (reason === "time") {
                 const warningEmbed = new EmbedBuilder()
                     .setColor("Yellow")
-                    .setDescription(
-                        `⚠️ |  Unfortunately, the embed has expired!`
-                    );
+                    .setAuthor({
+                        iconURL: client.user.displayAvatarURL({
+                            size: 128,
+                        }),
+                        name: `Embed has expired`,
+                    });
 
                 await interaction.editReply({
                     embeds: [warningEmbed],

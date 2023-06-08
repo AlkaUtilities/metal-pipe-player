@@ -3,8 +3,8 @@
         "name": "Metal pipe falling sound effect but it’s more violent",
         "path": "E:\\VSCode\\metal-pipe-player\\audio\\Metal pipe falling sound effect but it’s more violent_2.mp3",
         "delay": {
-            "min": 5000,
-            "max": 60000
+            "min": 60000,
+            "max": 300000
         }
     },
     "1040913930941386772": {
