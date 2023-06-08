@@ -26,17 +26,15 @@ module.exports = {
         const audios = require("../../config/audios.json");
         const list = audios.map(
             (i) =>
-                `${audios.indexOf(i)}. ${
+                `${audios.indexOf(i) + 1}. **${
                     i.src ? `[${i.name}](${i.src})` : `${i.name}`
-                }`
+                }**`
         );
 
         const embedDescriptions = [];
 
-        i = 0;
         // this part took forever to make
         for (const name of list) {
-            i++;
             // check if the length is currently 0 (no embeds)
             // add the first item
             if (embedDescriptions.length === 0) {
@@ -60,13 +58,8 @@ module.exports = {
             // would exceed the specified limit
             //
             // 4096 is the embed limit
-            // 20 is for the footer ("Page XXXXXXX/XXXXXXX")
-            console.log(
-                `${i} | ${temp.join("\\n").length} | ${
-                    embedDescriptions.length - 1
-                }`
-            );
-            if (temp.join("\\n").length + 20 >= 4096) {
+            // 47 is for the footer ("Page XXXX/XXXX • XXXXXXX audio(s) are available")
+            if (temp.join("\\n").length + 47 >= 4096) {
                 // if it exceeds make a new sub-array with the current item
                 embedDescriptions[embedDescriptions.length] = [name];
             } else {
@@ -88,6 +81,12 @@ module.exports = {
         }
 
         // use embedpages
-        await embedPages(client, interaction, embeds, false);
+        await embedPages(
+            client,
+            interaction,
+            embeds,
+            false,
+            `${audios.length} audio(s) are available`
+        );
     },
 };

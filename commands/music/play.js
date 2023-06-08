@@ -16,7 +16,7 @@ const fs = require("fs");
 const { inspect } = require("util");
 
 const config = require("../../config/config.json");
-const audioCfg = require("../../config/audio_cfg.json");
+let audioCfg = require("../../config/audio_cfg.json");
 const path = require("path");
 const internal = require("stream");
 
@@ -36,6 +36,7 @@ module.exports = {
                 .setDescription(
                     "Index of the audio to be played. Use /list to see a list of the available audio(s)"
                 )
+                .setMinValue(1)
                 .setRequired(false)
         ),
     /**
@@ -83,7 +84,7 @@ module.exports = {
             });
         }
 
-        const index = interaction.options.getNumber("index", false);
+        let index = interaction.options.getNumber("index", false);
 
         if (!(interaction.guildId in audioCfg)) {
             // default value
@@ -110,7 +111,10 @@ module.exports = {
             });
         }
 
-        if (index < 0 || index > audios.length - 1) {
+        // This is because in `/list` or list.js, the index starts with a 1 instead of a 0, therefore we should decrement the value of index here by 1
+        index--;
+
+        if (index > audios.length - 1) {
             return interaction.reply({
                 embeds: [
                     new EmbedBuilder()
@@ -118,7 +122,7 @@ module.exports = {
                             iconURL: client.user.displayAvatarURL({
                                 size: 128,
                             }),
-                            name: `Index cannot be less than 0 or greater than the available audio(s)`,
+                            name: `Index cannot be greater than the available audio(s)`,
                         })
                         .setColor(config.embeds.bad),
                 ],
@@ -175,14 +179,14 @@ module.exports = {
 
         let check;
 
-        max = audioCfg[interaction.guildId].delay.max;
-        min = audioCfg[interaction.guildId].delay.min;
-
         function getDelay() {
+            max = audioCfg[interaction.guildId].delay.max;
+            min = audioCfg[interaction.guildId].delay.min;
             return Math.floor(Math.random() * (max - min + 1)) + min;
         }
 
         function refreshCheck() {
+            audioCfg = require("../../config/audio_cfg.json");
             check = getVoiceConnection(interaction.guildId) !== undefined;
         }
 

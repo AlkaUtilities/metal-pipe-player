@@ -7,7 +7,7 @@ const {
 } = require("discord.js");
 
 module.exports = {
-    embedPages: async (client, interaction, embeds, ephemeral) => {
+    embedPages: async (client, interaction, embeds, ephemeral, footer_info) => {
         const pages = {};
         const getRow = (id) => {
             //-------------- Create the action row with buttons --------------
@@ -44,7 +44,9 @@ module.exports = {
         const embed = embeds[pages[id]];
 
         await embeds[pages[id]].setFooter({
-            text: `Page ${pages[id] + 1}/${Pagemax}`,
+            text: `Page ${pages[id] + 1}/${Pagemax}${
+                footer_info ? ` • ${footer_info}` : ""
+            }`,
         });
 
         const replyEmbed = await interaction.reply({
@@ -79,7 +81,9 @@ module.exports = {
             }
 
             await embeds[pages[id]].setFooter({
-                text: `Page ${pages[id] + 1}/${Pagemax}`,
+                text: `Page ${pages[id] + 1}/${Pagemax}${
+                    footer_info ? ` • ${footer_info}` : ""
+                }`,
             });
 
             await interaction.editReply({

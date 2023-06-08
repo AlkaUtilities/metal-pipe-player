@@ -21,8 +21,6 @@ Join a voice channel and use `/play`
 Type `/list` to see a list of available audio(s) to play.
 Use `/play <index>` to play the selected audio.
 
-> **Note** Bot will play the selected audio only after the current audio has ended or the bot rejoins the vc
-
 #### Adding your own audio (self-host only)
 1. Add your audio to the audio folder
 2. Open **audios.json** located in the **config** folder
